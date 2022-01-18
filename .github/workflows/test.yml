@@ -76,7 +76,7 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
       - name: Releasing using Hub
-        uses: itsnitish22/Meme-Share@master
+        uses: ShaunLWM/action-release-debugapk@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           APP_FOLDER: app
