@@ -7,60 +7,60 @@ name: Android Pull Request & Master CI & CD to Firebase
     branches:
       - master
 jobs:
-  test:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Setup JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: "11"
-      - name: Set execution flag for gradlew
-        run: chmod +x gradlew
-      - name: Unit tests
-        run: bash ./gradlew test --stacktrace
-  build:
-    name: Upload apk to App Tester
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Setup JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: "11"
-      - name: build release
-        run: bash ./gradlew assembleDebug
-      - name: upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.2.2
-        with:
-          appId: "1:381040976409:android:b0ef33a65cfd53958a8088"
-          token: >-
-            1//0gMhKE9eX516XCgYIARAAGBASNwF-L9IrMkKn4kwv_xReaikQYJHWO5smvmcIts8LDgF700LkDxQK6z187BIzIC66mAG0DAzy_sE
-          groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
-  apk:
-    name: Generate APK
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Setup JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: "11"
-      - name: Set execution flag for gradlew
-        run: chmod +x gradlew
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+#   test:
+#     name: Run Unit Tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2.4.0
+#       - name: Setup JDK
+#         uses: actions/setup-java@v2.5.0
+#         with:
+#           distribution: temurin
+#           java-version: "11"
+#       - name: Set execution flag for gradlew
+#         run: chmod +x gradlew
+#       - name: Unit tests
+#         run: bash ./gradlew test --stacktrace
+#   build:
+#     name: Upload apk to App Tester
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2.4.0
+#       - name: Setup JDK
+#         uses: actions/setup-java@v2.5.0
+#         with:
+#           distribution: temurin
+#           java-version: "11"
+#       - name: build release
+#         run: bash ./gradlew assembleDebug
+#       - name: upload artifact to Firebase App Distribution
+#         uses: wzieba/Firebase-Distribution-Github-Action@v1.2.2
+#         with:
+#           appId: "1:381040976409:android:b0ef33a65cfd53958a8088"
+#           token: >-
+#             1//0gMhKE9eX516XCgYIARAAGBASNwF-L9IrMkKn4kwv_xReaikQYJHWO5smvmcIts8LDgF700LkDxQK6z187BIzIC66mAG0DAzy_sE
+#           groups: testers
+#           file: app/build/outputs/apk/debug/app-debug.apk
+#   apk:
+#     name: Generate APK
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2.4.0
+#       - name: Setup JDK
+#         uses: actions/setup-java@v2.5.0
+#         with:
+#           distribution: temurin
+#           java-version: "11"
+#       - name: Set execution flag for gradlew
+#         run: chmod +x gradlew
+#       - name: Build debug APK
+#         run: bash ./gradlew assembleDebug --stacktrace
+#       - name: Upload APK
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: app
+#           path: app/build/outputs/apk/debug/app-debug.apk
   Gradle:
     runs-on: ubuntu-latest
     steps:
@@ -76,7 +76,7 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
       - name: Releasing using Hub
-        uses: kyze8439690/action-release-releaseapk@master
+        uses: itsnitish22/Meme-Share@master
         env:
-          GITHUB_TOKEN: "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"
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           APP_FOLDER: app
