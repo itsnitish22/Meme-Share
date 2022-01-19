@@ -60,7 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.run_number }} 
           release_name: MemeShare v${{ github.run_number }} 
       - name: Upload Release APK
         id: upload_release_asset
