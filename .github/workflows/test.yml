@@ -1,57 +1,26 @@
-name: Build and release APK
-"on":
-  pull_request:
-    branches:
-      - master
+name: Build & Publish Release APK
+
+on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
+
 jobs:
-  release-apk:
-    name: Release APK
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download APK
-        uses: actions/download-artifact@v2
-        with: Upload APK
-      - name: Archive APK contents
-        uses: thedoctor0/zip-release@master
-        with:
-          filname: apk.zip
-      - name: Create github release
-        id: create-new-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRETMEMESHARE }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release V${{ github.run_number }}
-      - name: Upload assest to Github Release
-        uses: actions/upload-release-assset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRETMEMESHARE }}
-        with:
-          upload_url: ${{ steps.create-new-release.outputs.upload_url }}
-          asset_path: ./apk.zip
-          asset_name: apk-v${{ github.run_number }}.zip
-          asset_content_type: appplication/zip
-  build:
-    name: Generate APK
+  Gradle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Setup JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: "11"
-      - name: Set execution flag for gradlew
-        run: chmod +x gradlew
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+    - name: checkout code
+      uses: actions/checkout@v2
+    - name: setup jdk
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Make Gradle executable
+      run: chmod +x ./gradlew
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+    - name: Releasing using Hub
+      uses: kyze8439690/action-release-releaseapk@master
+      env:
+       GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       APP_FOLDER: app
