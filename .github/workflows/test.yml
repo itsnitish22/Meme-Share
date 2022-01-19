@@ -1,9 +1,12 @@
 name: Build & Publish Release APK
 
 on:
+  pull_request:
+    branches:
+      - master
   push:
-    tags:
-      - '*'
+    branches:
+      - master
 
 jobs:
   Gradle:
